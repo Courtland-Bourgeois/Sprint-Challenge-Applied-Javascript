@@ -17,3 +17,58 @@
 // </div>
 //
 // Create a card for each of the articles and add the card to the DOM.
+
+
+function Card(art) {
+
+
+    //add elements
+    const card = document.createElement('div'),
+        headline = document.createElement('div'),
+        author = document.createElement('div'),
+        imgContainer = document.createElement('div'),
+        img = document.createElement('img'),
+        name = document.createElement('span');
+
+
+    // add classes
+    card.classList.add('card');
+    headline.classList.add('headline');
+    author.classList.add('author');
+    imgContainer.classList.add('img-container');
+
+
+    // append elements
+    card.appendChild(headline);
+    card.appendChild(author);
+    author.appendChild(imgContainer);
+    imgContainer.appendChild(img);
+    author.appendChild(name);
+
+
+    // add attributes
+    headline.textContent = art.headline;
+    img.src = art.authorPhoto;
+    name.textContent = `By ${art.authorName}`;
+
+
+    return card;
+};
+
+
+const cardsContainer = document.querySelector('.cards-container');
+
+axios
+    .get('https://lambda-times-backend.herokuapp.com/articles')
+    .then(response => {
+        // console.log(Object.values(response.data.articles));
+        Object.values(response.data.articles).forEach(arr => {
+            arr.forEach(item => {
+                const article = Card(item)
+                cardsContainer.appendChild(article);
+            })
+        })
+    })
+    .catch(err => {
+        console.log(err);
+    })
